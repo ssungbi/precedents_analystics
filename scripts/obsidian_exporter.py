@@ -52,14 +52,26 @@ aliases: []
 
 ## 기본 정보
 
+- 사건번호: {analysis_result.get("case_no", "")}
+- 법원: {analysis_result.get("court", "")}
+- 선고일/판결일: {analysis_result.get("date", "")}
+- 사건유형: {analysis_result.get("case_type", "")}
 - **소비자 유불리**: {analysis_result.get("favorability", "판단 불가")} ({analysis_result.get("favorability_reason", "")})
-{analysis_result.get("basic_info", "- 정보 없음")}
+{analysis_result.get("basic_info", "")}
 
 ## 핵심 쟁점
 
 - **사건 직접 쟁점**: {core_issues.get("direct_issue", "")}
 - **약관/법리 쟁점**: {core_issues.get("legal_issue", "")}
 - **실무 확장 쟁점**: {core_issues.get("practical_issue", "")}
+
+## 인정 요건
+
+{to_bullet_list(analysis_result.get("acceptance_criteria", []))}
+
+## 배척 요건 또는 한계
+
+{to_bullet_list(analysis_result.get("rejection_criteria", []))}
 
 ## 사실관계 타임라인
 
