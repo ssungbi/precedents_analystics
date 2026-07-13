@@ -46,15 +46,22 @@ def update_github_pages_data(precedent_type: str, analysis_result: dict) -> str:
         "year": analysis_result.get("year", ""),
         "date": analysis_result.get("date", ""),
         "case_type": analysis_result.get("case_type", ""),
-        "core_issue": analysis_result.get("core_issue", ""),
+        "tags": analysis_result.get("tags", []),
+        "favorability": analysis_result.get("favorability", ""),
+        "favorability_reason": analysis_result.get("favorability_reason", ""),
+        "basic_info": analysis_result.get("basic_info", ""),
+        "core_issues": analysis_result.get("core_issues", {}),
+        "fact_timeline": analysis_result.get("fact_timeline", []),
+        "recognized_facts": analysis_result.get("recognized_facts", []),
+        "court_decision": analysis_result.get("court_decision", []),
+        "diagnosis_and_liability_date": analysis_result.get("diagnosis_and_liability_date", ""),
         "acceptance_criteria": analysis_result.get("acceptance_criteria", []),
         "rejection_criteria": analysis_result.get("rejection_criteria", []),
-        "fact_summary": analysis_result.get("fact_summary", []),
-        "court_decision": analysis_result.get("court_decision", []),
         "practical_points": analysis_result.get("practical_points", []),
+        "insurer_actual_claim": analysis_result.get("insurer_actual_claim", []),
         "expected_rebuttals": analysis_result.get("expected_rebuttals", []),
         "counter_logic": analysis_result.get("counter_logic", []),
-        "keywords": analysis_result.get("keywords", [])
+        "cautions": analysis_result.get("cautions", [])
     }
     
     # Avoid exact duplicates by title

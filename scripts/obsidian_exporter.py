@@ -23,9 +23,11 @@ def save_to_obsidian(vault_path: str, analysis_result: dict, raw_text: str) -> s
     filename = f"{date_str}_{safe_title}.md"
     file_path = os.path.join(base_folder, filename)
     
-    keywords = analysis_result.get("keywords", [])
-    tags = [f'"{k}"' for k in keywords]
-    tags_str = "\n  - ".join(tags)
+    tags = analysis_result.get("tags", [])
+    if not isinstance(tags, list):
+        tags = []
+    
+    tags_str = "\n  - ".join([f'"{t}"' for t in tags])
     if tags:
         tags_str = "\n  - " + tags_str
     
@@ -43,39 +45,45 @@ aliases: []
             return f"- {items}"
         return "\n".join([f"- {item}" for item in items])
 
+    core_issues = analysis_result.get("core_issues", {})
+    if isinstance(core_issues, str):
+        core_issues = {"direct_issue": core_issues}
+        
     markdown_content += f"""# {title}
 
 ## 기본 정보
 
-- 사건번호: {analysis_result.get("case_no", "")}
-- 법원: {analysis_result.get("court", "")}
-- 선고연도: {analysis_result.get("year", "")}
-- 선고일: {analysis_result.get("date", "")}
-- 사건유형: {analysis_result.get("case_type", "")}
+{analysis_result.get("basic_info", "- 정보 없음")}
 
 ## 핵심 쟁점
 
-- {analysis_result.get("core_issue", "")}
+- **사건 직접 쟁점**: {core_issues.get("direct_issue", "")}
+- **약관/법리 쟁점**: {core_issues.get("legal_issue", "")}
+- **실무 확장 쟁점**: {core_issues.get("practical_issue", "")}
 
-## 인정 요건
+## 사실관계 타임라인
 
-{to_bullet_list(analysis_result.get("acceptance_criteria", []))}
+{to_bullet_list(analysis_result.get("fact_timeline", []))}
 
-## 배척 요건 또는 한계
+## 원문상 인정 사실
 
-{to_bullet_list(analysis_result.get("rejection_criteria", []))}
-
-## 사실관계 요약
-
-{to_bullet_list(analysis_result.get("fact_summary", []))}
+{to_bullet_list(analysis_result.get("recognized_facts", []))}
 
 ## 법원의 판단
 
 {to_bullet_list(analysis_result.get("court_decision", []))}
 
+## 진단확정일/책임개시일 판단
+
+{analysis_result.get("diagnosis_and_liability_date", "- 내용 없음")}
+
 ## 실무 적용 포인트
 
 {to_bullet_list(analysis_result.get("practical_points", []))}
+
+## 보험사 실제 주장
+
+{to_bullet_list(analysis_result.get("insurer_actual_claim", []))}
 
 ## 보험사 예상 반론
 
@@ -85,9 +93,19 @@ aliases: []
 
 {to_bullet_list(analysis_result.get("counter_logic", []))}
 
+## 주의할 점
+
+{to_bullet_list(analysis_result.get("cautions", []))}
+
+## 관련 노트
+
+- (필요시 작성)
+
 ---
+
 ## 인포그래픽 텍스트
-{analysis_result.get("infographic_text", "")}
+
+{analysis_result.get("infographic_text", "- 내용 없음")}
 """
 
     try:
