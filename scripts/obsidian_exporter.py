@@ -19,8 +19,7 @@ def save_to_obsidian(vault_path: str, analysis_result: dict, raw_text: str) -> s
     title = analysis_result.get("title", "Untitled")
     # Clean title for filename
     safe_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).rstrip()
-    date_str = datetime.datetime.now().strftime("%Y%m%d")
-    filename = f"{date_str}_{safe_title}.md"
+    filename = f"{safe_title}.md"
     file_path = os.path.join(base_folder, filename)
     
     tags = analysis_result.get("tags", [])
@@ -53,6 +52,7 @@ aliases: []
 
 ## 기본 정보
 
+- **소비자 유불리**: {analysis_result.get("favorability", "판단 불가")} ({analysis_result.get("favorability_reason", "")})
 {analysis_result.get("basic_info", "- 정보 없음")}
 
 ## 핵심 쟁점

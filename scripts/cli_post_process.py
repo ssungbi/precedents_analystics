@@ -38,6 +38,8 @@ def main():
         dup = find_duplicate(result.get("case_no", ""), vault_path)
         if dup:
             print(f"⚠️ Duplicate found in Vault: {dup['filename']}")
+            print("Skipping further export operations.")
+            sys.exit(0)
             
         print("▶ Exporting to Obsidian...")
         obs_res = obsidian_exporter.save_to_obsidian(vault_path, result, raw_text)
